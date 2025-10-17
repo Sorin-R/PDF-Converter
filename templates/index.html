@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Converter - Images & Documents to PDF</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            animation: move 25s linear infinite;
+            border-radius: 50%;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateX(0) translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(20vw) translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .logo svg {
+            width: 50px;
+            height: 50px;
+            fill: white;
+        }
+
+        h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--light);
+            padding: 5px;
+            border-radius: 12px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .drop-zone {
+            border: 3px dashed var(--border);
+            border-radius: 16px;
+            padding: 60px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: var(--light);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+            background: #f0f1ff;
+            transform: translateY(-2px);
+        }
+
+        .drop-zone.dragging {
+            border-color: var(--secondary);
+            background: #f3f0ff;
+            transform: scale(1.02);
+        }
+
+        .drop-zone-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            opacity: 0.5;
+        }
+
+        .drop-zone h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .drop-zone p {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .browse-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browse-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .file-details h4 {
+            color: var(--dark);
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .file-details span {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: #fee2e2;
+        }
+
+        .input-group {
+            margin: 30px 0;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .convert-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .convert-btn.processing {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .download-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-message.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid var(--border);
+        }
+
+        .output-section h3 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .pdf-item {
+            padding: 20px;
+            background: var(--light);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .pdf-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .pdf-item h4 {
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            word-break: break-all;
+            font-size: 0.9rem;
+        }
+
+        .pdf-item span {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .pdf-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .pdf-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .open-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .open-btn:hover {
+            background: #059669;
+        }
+
+        .delete-btn {
+            background: var(--error);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .pdf-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <span style="left: 10%; animation-delay: 0s;"></span>
+        <span style="left: 20%; animation-delay: 2s;"></span>
+        <span style="left: 30%; animation-delay: 4s;"></span>
+        <span style="left: 40%; animation-delay: 6s;"></span>
+        <span style="left: 50%; animation-delay: 8s;"></span>
+        <span style="left: 60%; animation-delay: 10s;"></span>
+        <span style="left: 70%; animation-delay: 12s;"></span>
+        <span style="left: 80%; animation-delay: 14s;"></span>
+        <span style="left: 90%; animation-delay: 16s;"></span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H13L15,19H13.5L13.1,18H11.9L11.5,19H10M12.3,16.9L11.9,17.7H13.1L12.7,16.9H12.3Z" />
+                </svg>
+            </div>
+            <h1>PDF Converter</h1>
+            <p class="subtitle">Convert images and documents to PDF with automatic naming</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('images')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19M8.5,13.5L11,16.5L14.5,12L19,18H5L8.5,13.5Z" />
+                </svg>
+                Images to PDF
+            </button>
+            <button class="tab" onclick="switchTab('documents')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
+                </svg>
+                Documents to PDF
+            </button>
+        </div>
+
+        <div id="images-tab" class="tab-content active">
+            <div class="drop-zone" onclick="document.getElementById('image-input').click()" ondrop="handleDrop(event, 'image')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="#9ca3af">
+                    <path d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z" />
+                </svg>
+                <h3>Drop your images here</h3>
+                <p>Supports JPG, PNG, HEIC, BMP, TIFF formats</p>
+                <button class="browse-btn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
+                    </svg>
+                    Browse Files
+                </button>
+                <input type="file" id="image-input" class="file-input" multiple accept=".jpg,.jpeg,.png,.bmp,.tiff,.heic,.heif" onchange="handleFileSelect(event, 'image')">
+            </div>
+
+            <div id="image-file-list" class="file-list"></div>
+        </div>
+
+        <div id="documents-tab" class="tab-content">
+            <div class="drop-zone" onclick="document.getElementById('doc-input').click()" ondrop="handleDrop(event, 'document')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="#9ca3af">
+                    <path d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
+                </svg>
+                <h3>Drop your documents here</h3>
+                <p>Supports DOCX, TXT, MD, RTF, ODT formats</p>
+                <button class="browse-btn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
+                    </svg>
+                    Browse Files
+                </button>
+                <input type="file" id="doc-input" class="file-input" multiple accept=".docx,.txt,.md,.rtf,.odt" onchange="handleFileSelect(event, 'document')">
+            </div>
+
+            <div id="doc-file-list" class="file-list"></div>
+        </div>
+
+        <div class="input-group">
+            <label for="pdf-name">PDF Base Name</label>
+            <input type="text" id="pdf-name" placeholder="Enter a name (e.g., vacation, report)" value="output">
+        </div>
+
+        <button class="convert-btn" onclick="convertToPDF()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7,18H9V14H7V18M11,18H13V14H11V18M15,18H17V14H15V18M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M9,7H15V9H9V7M9,11H15V13H9V11Z" />
+            </svg>
+            Convert to PDF
+        </button>
+
+        <button class="download-btn" id="downloadBtn" style="display: none;" onclick="downloadLatestPDF()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+            </svg>
+            Download Latest PDF
+        </button>
+
+        <div id="status-container"></div>
+    </div>
+
+    <script>
+        let selectedFiles = {
+            image: [],
+            document: []
+        };
+        let currentTab = 'images';
+        let latestPDF = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Page is ready
+        });
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+            
+            // Clear selected files when switching tabs
+            selectedFiles.image = [];
+            selectedFiles.document = [];
+            updateFileList('image');
+            updateFileList('document');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragging');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragging');
+        }
+
+        function handleDrop(e, type) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragging');
+            
+            const files = Array.from(e.dataTransfer.files);
+            addFiles(files, type);
+        }
+
+        function handleFileSelect(e, type) {
+            const files = Array.from(e.target.files);
+            addFiles(files, type);
+        }
+
+        function addFiles(files, type) {
+            const validExtensions = type === 'image' 
+                ? ['.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.heic', '.heif']
+                : ['.docx', '.txt', '.md', '.rtf', '.odt'];
+            
+            const validFiles = files.filter(file => {
+                const ext = '.' + file.name.split('.').pop().toLowerCase();
+                return validExtensions.includes(ext);
+            });
+
+            selectedFiles[type] = [...selectedFiles[type], ...validFiles];
+            updateFileList(type);
+        }
+
+        function updateFileList(type) {
+            const listElement = document.getElementById(type === 'image' ? 'image-file-list' : 'doc-file-list');
+            listElement.innerHTML = '';
+            
+            selectedFiles[type].forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const ext = file.name.split('.').pop().toUpperCase();
+                const size = (file.size / 1024).toFixed(2) + ' KB';
+                
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-icon">${ext}</div>
+                        <div class="file-details">
+                            <h4>${file.name}</h4>
+                            <span>${size}</span>
+                        </div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFile('${type}', ${index})">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                        </svg>
+                    </button>
+                `;
+                
+                listElement.appendChild(fileItem);
+            });
+        }
+
+        function removeFile(type, index) {
+            selectedFiles[type].splice(index, 1);
+            updateFileList(type);
+        }
+
+        async function uploadFiles(files, type) {
+            const formData = new FormData();
+            formData.append('type', type);
+            
+            // Properly append files to FormData
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i], files[i].name);
+            }
+            
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Upload failed');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('Upload error:', error);
+                throw error;
+            }
+        }
+
+        async function convertToPDF() {
+            const type = currentTab === 'images' ? 'image' : 'document';
+            const files = selectedFiles[type];
+            
+            if (files.length === 0) {
+                showStatus('Please select at least one file', 'error');
+                return;
+            }
+            
+            const baseName = document.getElementById('pdf-name').value.trim() || 'output';
+            
+            // Update button state
+            const convertBtn = document.querySelector('.convert-btn');
+            convertBtn.disabled = true;
+            convertBtn.classList.add('processing');
+            const originalContent = convertBtn.innerHTML;
+            convertBtn.innerHTML = `
+                <div class="spinner"></div>
+                Converting...
+            `;
+            
+            try {
+                // Upload files first
+                showStatus('Uploading files...', 'info');
+                const uploadResult = await uploadFiles(files, type);
+                
+                if (!uploadResult.success) {
+                    throw new Error(uploadResult.error || 'Upload failed');
+                }
+                
+                // Convert to PDF
+                showStatus('Converting to PDF...', 'info');
+                const convertResponse = await fetch('/api/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        baseName: baseName
+                    })
+                });
+                
+                const result = await convertResponse.json();
+                
+                if (!convertResponse.ok) {
+                    throw new Error(result.error || 'Conversion failed');
+                }
+                
+                // Reset
+                selectedFiles[type] = [];
+                updateFileList(type);
+                
+                showStatus(`✅ ${result.message}`, 'success');
+                
+                // Store the latest PDF and show download button
+                if (result.pdfs && result.pdfs.length > 0) {
+                    latestPDF = result.pdfs[0];
+                    document.getElementById('downloadBtn').style.display = 'flex';
+                    
+                    // Auto-open the first created PDF
+                    setTimeout(() => {
+                        openPDF(result.pdfs[0]);
+                    }, 500);
+                }
+                
+            } catch (error) {
+                console.error('Conversion error:', error);
+                showStatus('❌ Conversion failed: ' + error.message, 'error');
+            } finally {
+                // Reset button
+                convertBtn.disabled = false;
+                convertBtn.classList.remove('processing');
+                convertBtn.innerHTML = originalContent;
+            }
+        }
+
+        function showStatus(message, type) {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `
+                <div class="status-message ${type}">
+                    ${message}
+                </div>
+            `;
+            
+            if (type !== 'error') {
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        async function openPDF(filename) {
+            try {
+                const response = await fetch(`/api/open/${filename}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    showStatus(`📄 Opening ${filename}...`, 'info');
+                } else {
+                    showStatus('Failed to open PDF', 'error');
+                }
+            } catch (error) {
+                // If opening locally fails, try downloading
+                window.open(`/pdf/${filename}`, '_blank');
+            }
+        }
+
+        function downloadLatestPDF() {
+            if (latestPDF) {
+                // Create a download link
+                const link = document.createElement('a');
+                link.href = `/pdf/${latestPDF}`;
+                link.download = latestPDF;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showStatus(`📥 Downloading ${latestPDF}...`, 'info');
+            } else {
+                showStatus('No PDF available to download', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
