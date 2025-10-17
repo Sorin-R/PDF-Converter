@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,12 +61,15 @@
                 transform: translateX(0) translateY(100vh) rotate(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.3;
             }
+
             90% {
                 opacity: 0.3;
             }
+
             100% {
                 transform: translateX(20vw) translateY(-100vh) rotate(720deg);
                 opacity: 0;
@@ -89,6 +93,7 @@
                 transform: translateY(30px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -113,9 +118,12 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
@@ -192,6 +200,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -287,6 +296,7 @@
                 transform: translateX(-20px);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -552,21 +562,22 @@
             h1 {
                 font-size: 1.8rem;
             }
-            
+
             .container {
                 padding: 20px;
             }
-            
+
             .tabs {
                 flex-direction: column;
             }
-            
+
             .pdf-list {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="bg-animation">
         <span style="left: 10%; animation-delay: 0s;"></span>
@@ -584,7 +595,8 @@
         <div class="header">
             <div class="logo">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H13L15,19H13.5L13.1,18H11.9L11.5,19H10M12.3,16.9L11.9,17.7H13.1L12.7,16.9H12.3Z" />
+                    <path
+                        d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H13L15,19H13.5L13.1,18H11.9L11.5,19H10M12.3,16.9L11.9,17.7H13.1L12.7,16.9H12.3Z" />
                 </svg>
             </div>
             <h1>PDF Converter</h1>
@@ -594,22 +606,33 @@
         <div class="tabs">
             <button class="tab active" onclick="switchTab('images')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19M8.5,13.5L11,16.5L14.5,12L19,18H5L8.5,13.5Z" />
+                    <path
+                        d="M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19M8.5,13.5L11,16.5L14.5,12L19,18H5L8.5,13.5Z" />
                 </svg>
                 Images to PDF
             </button>
             <button class="tab" onclick="switchTab('documents')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
+                    <path
+                        d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
                 </svg>
                 Documents to PDF
             </button>
+            <!-- <button class="tab" onclick="switchTab('redact')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3,6H21V8H3V6M3,10H21V12H3V10M3,14H15V16H3V14Z" />
+                </svg>
+                Redact PDF
+            </button> -->
         </div>
 
         <div id="images-tab" class="tab-content active">
-            <div class="drop-zone" onclick="document.getElementById('image-input').click()" ondrop="handleDrop(event, 'image')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+            <div class="drop-zone" onclick="document.getElementById('image-input').click()"
+                ondrop="handleDrop(event, 'image')" ondragover="handleDragOver(event)"
+                ondragleave="handleDragLeave(event)">
                 <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="#9ca3af">
-                    <path d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z" />
+                    <path
+                        d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z" />
                 </svg>
                 <h3>Drop your images here</h3>
                 <p>Supports JPG, PNG, HEIC, BMP, TIFF formats</p>
@@ -619,16 +642,20 @@
                     </svg>
                     Browse Files
                 </button>
-                <input type="file" id="image-input" class="file-input" multiple accept=".jpg,.jpeg,.png,.bmp,.tiff,.heic,.heif" onchange="handleFileSelect(event, 'image')">
+                <input type="file" id="image-input" class="file-input" multiple
+                    accept=".jpg,.jpeg,.png,.bmp,.tiff,.heic,.heif" onchange="handleFileSelect(event, 'image')">
             </div>
 
             <div id="image-file-list" class="file-list"></div>
         </div>
 
         <div id="documents-tab" class="tab-content">
-            <div class="drop-zone" onclick="document.getElementById('doc-input').click()" ondrop="handleDrop(event, 'document')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+            <div class="drop-zone" onclick="document.getElementById('doc-input').click()"
+                ondrop="handleDrop(event, 'document')" ondragover="handleDragOver(event)"
+                ondragleave="handleDragLeave(event)">
                 <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="#9ca3af">
-                    <path d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
+                    <path
+                        d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
                 </svg>
                 <h3>Drop your documents here</h3>
                 <p>Supports DOCX, TXT, MD, RTF, ODT formats</p>
@@ -638,30 +665,131 @@
                     </svg>
                     Browse Files
                 </button>
-                <input type="file" id="doc-input" class="file-input" multiple accept=".docx,.txt,.md,.rtf,.odt" onchange="handleFileSelect(event, 'document')">
+                <input type="file" id="doc-input" class="file-input" multiple accept=".docx,.txt,.md,.rtf,.odt"
+                    onchange="handleFileSelect(event, 'document')">
             </div>
 
             <div id="doc-file-list" class="file-list"></div>
         </div>
 
+        <div id="redact-tab" class="tab-content">
+            <div class="drop-zone" onclick="document.getElementById('redact-input').click()"
+                ondrop="handleDrop(event, 'redact')" ondragover="handleDragOver(event)"
+                ondragleave="handleDragLeave(event)">
+                <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="#9ca3af">
+                    <path d="M3,6H21V8H3V6M3,10H21V12H3V10M3,14H21V16H3V14Z" />
+                </svg>
+                <h3>Drop your PDFs to Redact</h3>
+                <p>Supports PDF files — choose terms to automatically remove or replace with [REDACTED]</p>
+                <button class="browse-btn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
+                    </svg>
+                    Browse Files
+                </button>
+                <input type="file" id="redact-input" class="file-input" accept=".pdf"
+                    onchange="handleFileSelect(event, 'redact')">
+            </div>
+
+            <div id="redact-file-list" class="file-list"></div>
+
+            <div class="input-group">
+                <label for="redact-terms">Terms to Redact</label>
+                <input type="text" id="redact-terms" placeholder="Enter words or phrases to redact (comma separated)">
+            </div>
+
+            <button class="convert-btn" onclick="redactPDF()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17,3H7A2,2 0 0,0 5,5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V5A2,2 0 0,0 17,3M9,17H15V15H9V17M9,13H15V11H9V13Z" />
+                </svg>
+                Redact PDF
+            </button>
+        </div>
+
         <div class="input-group">
             <label for="pdf-name">PDF Base Name</label>
-            <input type="text" id="pdf-name" placeholder="Enter a name (e.g., vacation, report)" value="output">
+            <input type="text" id="pdf-name"
+                placeholder="Enter a name (e.g., vacation, report) or it will take the defolt name 'Output'">
         </div>
 
         <button class="convert-btn" onclick="convertToPDF()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M7,18H9V14H7V18M11,18H13V14H11V18M15,18H17V14H15V18M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M9,7H15V9H9V7M9,11H15V13H9V11Z" />
+                <path
+                    d="M7,18H9V14H7V18M11,18H13V14H11V18M15,18H17V14H15V18M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M9,7H15V9H9V7M9,11H15V13H9V11Z" />
             </svg>
             Convert to PDF
         </button>
 
-        <button class="download-btn" id="downloadBtn" style="display: none;" onclick="downloadLatestPDF()">
+        <!-- <button class="download-btn" id="downloadBtn" style="display: none;" onclick="downloadLatestPDF()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
             </svg>
-            Download Latest PDF
-        </button>
+            Download Your PDF (<span id="timer">60</span>s)
+        </button> -->
+
+        <div id="downloadContainer"></div>
+
+        <script>
+            function addDownloadButton(filename) {
+                const container = document.getElementById('downloadContainer');
+                const uniqueId = 'downloadBtn_' + Date.now();
+
+                const btn = document.createElement('button');
+                btn.className = 'download-btn';
+                btn.id = uniqueId;
+                btn.innerHTML = `
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+        </svg>
+        Download ${filename} (<span class="timer">60</span>s)
+    `;
+                btn.onclick = () => downloadSpecificPDF(filename, btn);
+                container.appendChild(btn);
+
+                let timeLeft = 60;
+                const timerSpan = btn.querySelector('.timer');
+                const countdown = setInterval(() => {
+                    timeLeft--;
+                    timerSpan.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        btn.remove();
+
+                        // ❗ Delete the file from the server when timer ends
+                        fetch(`/api/delete/${filename}`, { method: 'DELETE' })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    showStatus(`🗑️ ${filename} deleted from server after timer expired`, 'success');
+                                } else {
+                                    showStatus(`⚠️ Failed to delete ${filename}: ${data.error || 'Unknown error'}`, 'error');
+                                }
+                            })
+                            .catch(err => {
+                                console.error('Delete error:', err);
+                                showStatus(`⚠️ Error deleting ${filename}`, 'error');
+                            });
+                    }
+                }, 1000);
+            }
+
+            function downloadSpecificPDF(filename, btn) {
+                const link = document.createElement('a');
+                link.href = `/api/download/${filename}`;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showStatus(`📥 Downloading ${filename}...`, 'info');
+
+                setTimeout(() => {
+                    btn.remove();
+                    showStatus(`✅ PDF downloaded and removed from server`, 'success');
+                }, 1000);
+            }
+        </script>
 
         <div id="status-container"></div>
     </div>
@@ -675,21 +803,21 @@
         let latestPDF = null;
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Page is ready
         });
 
         function switchTab(tab) {
             currentTab = tab;
-            
+
             // Update tab buttons
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             // Update tab content
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(tab + '-tab').classList.add('active');
-            
+
             // Clear selected files when switching tabs
             selectedFiles.image = [];
             selectedFiles.document = [];
@@ -709,7 +837,7 @@
         function handleDrop(e, type) {
             e.preventDefault();
             e.currentTarget.classList.remove('dragging');
-            
+
             const files = Array.from(e.dataTransfer.files);
             addFiles(files, type);
         }
@@ -720,45 +848,66 @@
         }
 
         function addFiles(files, type) {
-            const validExtensions = type === 'image' 
-                ? ['.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.heic', '.heif']
-                : ['.docx', '.txt', '.md', '.rtf', '.odt'];
-            
+            let validExtensions = [];
+
+            if (type === 'image') {
+                validExtensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.heic', '.heif'];
+            } else if (type === 'document') {
+                validExtensions = ['.docx', '.txt', '.md', '.rtf', '.odt'];
+            } else if (type === 'redact') {
+                validExtensions = ['.pdf'];
+            }
+
             const validFiles = files.filter(file => {
                 const ext = '.' + file.name.split('.').pop().toLowerCase();
                 return validExtensions.includes(ext);
             });
 
+            if (validFiles.length === 0) {
+                showStatus('❌ Invalid file type selected.', 'error');
+                return;
+            }
+
+            // Save selected files
+            if (!selectedFiles[type]) selectedFiles[type] = [];
             selectedFiles[type] = [...selectedFiles[type], ...validFiles];
+
             updateFileList(type);
         }
 
         function updateFileList(type) {
-            const listElement = document.getElementById(type === 'image' ? 'image-file-list' : 'doc-file-list');
+            let listElement;
+
+            if (type === 'image') listElement = document.getElementById('image-file-list');
+            else if (type === 'document') listElement = document.getElementById('doc-file-list');
+            else if (type === 'redact') listElement = document.getElementById('redact-file-list');
+
+            if (!listElement) return;
             listElement.innerHTML = '';
-            
-            selectedFiles[type].forEach((file, index) => {
+
+            const files = selectedFiles[type] || [];
+
+            files.forEach((file, index) => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item';
-                
+
                 const ext = file.name.split('.').pop().toUpperCase();
                 const size = (file.size / 1024).toFixed(2) + ' KB';
-                
+
                 fileItem.innerHTML = `
-                    <div class="file-info">
-                        <div class="file-icon">${ext}</div>
-                        <div class="file-details">
-                            <h4>${file.name}</h4>
-                            <span>${size}</span>
-                        </div>
-                    </div>
-                    <button class="remove-btn" onclick="removeFile('${type}', ${index})">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                        </svg>
-                    </button>
-                `;
-                
+            <div class="file-info">
+                <div class="file-icon">${ext}</div>
+                <div class="file-details">
+                    <h4>${file.name}</h4>
+                    <span>${size}</span>
+                </div>
+            </div>
+            <button class="remove-btn" onclick="removeFile('${type}', ${index})">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                </svg>
+            </button>
+        `;
                 listElement.appendChild(fileItem);
             });
         }
@@ -771,24 +920,24 @@
         async function uploadFiles(files, type) {
             const formData = new FormData();
             formData.append('type', type);
-            
+
             // Properly append files to FormData
             for (let i = 0; i < files.length; i++) {
                 formData.append('files', files[i], files[i].name);
             }
-            
+
             try {
                 const response = await fetch('/api/upload', {
                     method: 'POST',
                     body: formData
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (!response.ok) {
                     throw new Error(data.error || 'Upload failed');
                 }
-                
+
                 return data;
             } catch (error) {
                 console.error('Upload error:', error);
@@ -799,14 +948,14 @@
         async function convertToPDF() {
             const type = currentTab === 'images' ? 'image' : 'document';
             const files = selectedFiles[type];
-            
+
             if (files.length === 0) {
                 showStatus('Please select at least one file', 'error');
                 return;
             }
-            
-            const baseName = document.getElementById('pdf-name').value.trim() || 'output';
-            
+
+            const baseName = document.getElementById('pdf-name').value.trim() || 'Output';
+
             // Update button state
             const convertBtn = document.querySelector('.convert-btn');
             convertBtn.disabled = true;
@@ -816,16 +965,16 @@
                 <div class="spinner"></div>
                 Converting...
             `;
-            
+
             try {
                 // Upload files first
                 showStatus('Uploading files...', 'info');
                 const uploadResult = await uploadFiles(files, type);
-                
+
                 if (!uploadResult.success) {
                     throw new Error(uploadResult.error || 'Upload failed');
                 }
-                
+
                 // Convert to PDF
                 showStatus('Converting to PDF...', 'info');
                 const convertResponse = await fetch('/api/convert', {
@@ -838,30 +987,29 @@
                         baseName: baseName
                     })
                 });
-                
+
                 const result = await convertResponse.json();
-                
+
                 if (!convertResponse.ok) {
                     throw new Error(result.error || 'Conversion failed');
                 }
-                
+
                 // Reset
                 selectedFiles[type] = [];
                 updateFileList(type);
-                
+
                 showStatus(`✅ ${result.message}`, 'success');
-                
+
                 // Store the latest PDF and show download button
                 if (result.pdfs && result.pdfs.length > 0) {
                     latestPDF = result.pdfs[0];
-                    document.getElementById('downloadBtn').style.display = 'flex';
-                    
-                    // Auto-open the first created PDF
-                    setTimeout(() => {
-                        openPDF(result.pdfs[0]);
-                    }, 500);
+                    addDownloadButton(latestPDF);
+
+                    // ✅ Reset PDF Base Name field to empty (shows placeholder again)
+                    const pdfNameInput = document.getElementById('pdf-name');
+                    pdfNameInput.value = '';
                 }
-                
+
             } catch (error) {
                 console.error('Conversion error:', error);
                 showStatus('❌ Conversion failed: ' + error.message, 'error');
@@ -880,7 +1028,7 @@
                     ${message}
                 </div>
             `;
-            
+
             if (type !== 'error') {
                 setTimeout(() => {
                     container.innerHTML = '';
@@ -892,7 +1040,7 @@
             try {
                 const response = await fetch(`/api/open/${filename}`);
                 const result = await response.json();
-                
+
                 if (result.success) {
                     showStatus(`📄 Opening ${filename}...`, 'info');
                 } else {
@@ -906,19 +1054,80 @@
 
         function downloadLatestPDF() {
             if (latestPDF) {
-                // Create a download link
+                // Create a download link that will delete after download
                 const link = document.createElement('a');
-                link.href = `/pdf/${latestPDF}`;
+                link.href = `/api/download/${latestPDF}`;
                 link.download = latestPDF;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
+
                 showStatus(`📥 Downloading ${latestPDF}...`, 'info');
+
+                // Hide download button after downloading
+                setTimeout(() => {
+                    document.getElementById('downloadBtn').style.display = 'none';
+                    latestPDF = null;
+                    showStatus(`✅ PDF downloaded and removed from server`, 'success');
+                }, 1000);
             } else {
                 showStatus('No PDF available to download', 'error');
             }
         }
+
+        async function redactPDF() {
+            const fileInput = document.getElementById('redact-input');
+            const termsInput = document.getElementById('redact-terms').value.trim();
+
+            if (!fileInput.files.length) {
+                showStatus('Please select a PDF to redact', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const terms = termsInput ? termsInput.split(',').map(t => t.trim()) : [];
+
+            // Upload PDF first
+            const formData = new FormData();
+            formData.append('files', file);
+            formData.append('type', 'redact'); // upload to RedactPDF folder
+
+            try {
+                showStatus('Uploading PDF for redaction...', 'info');
+                const uploadRes = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const uploadData = await uploadRes.json();
+                if (!uploadData.success) throw new Error(uploadData.error || 'Upload failed');
+
+                showStatus('Opening redaction editor...', 'info');
+                window.location.href = `/redact-editor/${uploadData.files[0]}`;
+
+                const savedFileName = uploadData.files[0];
+
+                const response = await fetch('/api/redact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: savedFileName, terms })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    addDownloadButton(result.pdf);
+                    showStatus(result.message, 'success');
+                    document.getElementById('redact-terms').value = '';
+                    document.getElementById('redact-file-list').innerHTML = '';
+                    document.getElementById('redact-input').value = '';
+                } else {
+                    showStatus(result.error, 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                showStatus('❌ Redaction failed: ' + error.message, 'error');
+            }
+        }
     </script>
 </body>
+
 </html>

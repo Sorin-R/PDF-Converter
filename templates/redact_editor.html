@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Redact PDF - Interactive</title>
+
+    <!-- ✅ Load stable PDF.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        window.pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        #viewer {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: auto;
+            background: #333;
+            text-align: center;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            background: white;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #222;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            z-index: 10;
+        }
+
+        .toolbar button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .toolbar button:hover {
+            background: #4338ca;
+        }
+
+        .toolbar h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .redact-box {
+            position: absolute;
+            border: 2px solid red;
+            background: rgba(255, 0, 0, 0.4);
+            cursor: move;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+        <h3>Interactive Redaction Mode</h3>
+        <div>
+            <button onclick="saveRedactions()">Save & Download</button>
+        </div>
+    </div>
+
+    <div id="viewer"></div>
+
+    <script>
+        const filename = "{{ filename }}";
+        const url = `/RedactPDF/${filename}`;
+        const viewer = document.getElementById('viewer');
+
+        let pdfDoc = null;
+        let scale = 1.2;
+        let redactions = [];
+
+        // Load PDF.js
+        pdfjsLib.getDocument(url).promise.then(pdf => {
+            pdfDoc = pdf;
+            for (let i = 1; i <= pdf.numPages; i++) {
+                renderPage(i);
+            }
+        });
+
+        function renderPage(num) {
+            pdfDoc.getPage(num).then(page => {
+                const viewport = page.getViewport({ scale });
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                viewer.appendChild(canvas);
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                page.render(renderCtx);
+
+                // Add redaction layer
+                const overlay = document.createElement('div');
+                overlay.style.position = 'absolute';
+                overlay.style.left = canvas.offsetLeft + 'px';
+                overlay.style.top = canvas.offsetTop + 'px';
+                overlay.style.width = canvas.width + 'px';
+                overlay.style.height = canvas.height + 'px';
+                overlay.style.pointerEvents = 'none';
+                viewer.appendChild(overlay);
+
+                canvas.addEventListener('click', e => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const size = 100; // simple box
+                    const box = document.createElement('div');
+                    box.className = 'redact-box';
+                    box.style.left = (x - size / 2) + 'px';
+                    box.style.top = (y - size / 2) + 'px';
+                    box.style.width = size + 'px';
+                    box.style.height = size + 'px';
+                    viewer.appendChild(box);
+                    redactions.push({ page: num, x, y, width: size, height: size });
+                });
+            });
+        }
+
+        async function saveRedactions() {
+            if (redactions.length === 0) {
+                alert('No redactions added!');
+                return;
+            }
+            const res = await fetch('/api/redact-save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename, redactions })
+            });
+            const data = await res.json();
+            if (data.success) {
+                window.location.href = `/api/download/${data.pdf}`;
+            } else {
+                alert('Error saving redactions: ' + data.error);
+            }
+        }
+    </script>
+</body>
+
+</html>
